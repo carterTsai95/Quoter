@@ -7,10 +7,54 @@
 
 import Foundation
 
-struct Quote: Codable {
+class Favorites: ObservableObject {
+    // the actual resorts the user has favorited
+    var quotes: Set<Quote>
+
+    // the key we're using to read/write in UserDefaults
+    private let saveKey = "Favorites"
+
+    init() {
+        // load our saved data
+
+        // still here? Use an empty array
+        self.quotes = []
+    }
+
+    // returns true if our set contains this resort
+    func contains(_ quote: Quote) -> Bool {
+        
+        quotes.contains(quote)
+    }
+
+    // adds the resort to our set, updates all views, and saves the change
+    func add(_ quote: Quote) {
+        objectWillChange.send()
+        quotes.insert(quote)
+        save()
+    }
+
+    // removes the resort from our set, updates all views, and saves the change
+    func remove(_ quote: Quote) {
+        objectWillChange.send()
+        quotes.remove(quote)
+        save()
+    }
+
+    func save() {
+        // write out our data
+    }
+}
+
+
+struct Quote: Codable, Identifiable, Hashable{
+    
+    var id: UUID? {return UUID()}
     var text: String?
     var author: String?
     var tag: String?
+
+    
     
     var favorite: Bool?
     
@@ -18,7 +62,10 @@ struct Quote: Codable {
         return favorite ?? false
     }
     
+    static let allResorts: [Quote] = Bundle.main.decode("Quotes.json")
+    
 }
+
 
 extension Quote {
     enum tag: String, CaseIterable{
@@ -66,6 +113,7 @@ extension Quote {
  */
 
 let UserQuotes = [
+
     Quote(text: "To know oneself, one should assert oneself.", author: "Albert Camus" , tag: "motivational", favorite: true),
     Quote(text: "Well done is better than well said.", author: "Benjamin Franklin" , tag: "motivational", favorite: false),
     Quote(text: " If you want to succeed you should strike out on new paths, rather than travel the worn paths of accepted success.", author: "John D. Rockefeller" , tag: "motivational", favorite: false),
