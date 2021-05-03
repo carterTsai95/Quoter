@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+
+
+
 struct CategoriesDetail: View {
     
     let category: Quote.tag
@@ -63,39 +66,8 @@ struct CategoriesDetail: View {
     }
     
     func readJson(){
-        if let path = Bundle.main.path(forResource: "Quotes", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                let decoder = JSONDecoder()
-                do {
-                    
-                    let ApiModel = try decoder.decode(ApiResponse.self, from: data)
-                    
-                    
-                    let quotes = ApiModel.quotes!.filter { $0.tag == self.category.rawValue }
-                    
-                    self.quotes = quotes
-                    
-                    for quote in quotes.prefix(5){
-                        print(
-                            """
-                        Author: \(String(describing: quote.author))
-                        Text: \(String(describing: quote.text))
-                        Tag: \(String(describing: quote.tag))
-                        -------------
-                        """)
-                    }
-                    
-                    
-                }catch{
-                    print(error) // shows error
-                    print("Decoding failed")// local message
-                }
-                
-            } catch {
-                print(error) // shows error
-                print("Unable to read file")// local message
-            }
+        jsonResponse.getQuotesByCategory(category: self.category) { quotes in
+            self.quotes = quotes
         }
     }
     

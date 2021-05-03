@@ -7,6 +7,104 @@
 
 import Foundation
 
+let jsonResponse = JsonResoponse()
+
+
+class JsonResoponse
+{
+    
+    func getQuotesByCategory(category: Quote.tag, completionHandler: @escaping ([Quote]) -> Void)
+    {
+        if let path = Bundle.main.path(forResource: "Quotes", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let decoder = JSONDecoder()
+                do {
+                    
+                    let ApiModel = try decoder.decode(ApiResponse.self, from: data)
+                    
+                    
+                    let quotes = ApiModel.quotes!.filter { $0.tag == category.rawValue }
+                    
+//                    for quote in quotes.prefix(5){
+//                        print(
+//                            """
+//                        Author: \(String(describing: quote.author))
+//                        Text: \(String(describing: quote.text))
+//                        Tag: \(String(describing: quote.tag))
+//                        -------------
+//                        """)
+//                    }
+                    
+                    completionHandler(quotes)
+                    
+                    
+                }catch{
+                    print(error) // shows error
+                    print("Decoding failed")// local message
+                }
+                
+            } catch {
+                print(error) // shows error
+                print("Unable to read file")// local message
+            }
+        }
+    }
+
+    func getAllQuotes(completionHandler: @escaping ([Quote]) -> Void)
+    {
+        if let path = Bundle.main.path(forResource: "Quotes", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let decoder = JSONDecoder()
+                do {
+                    
+                    let ApiModel = try decoder.decode(ApiResponse.self, from: data)
+                                
+                    completionHandler(ApiModel.quotes!)
+                    
+                    
+                }catch{
+                    print(error) // shows error
+                    print("Decoding failed")// local message
+                }
+                
+            } catch {
+                print(error) // shows error
+                print("Unable to read file")// local message
+            }
+        }
+    }
+    
+    func getRandomQuote(completionHandler: @escaping (Quote) -> Void)
+    {
+        if let path = Bundle.main.path(forResource: "Quotes", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let decoder = JSONDecoder()
+                do {
+                    
+                    let ApiModel = try decoder.decode(ApiResponse.self, from: data)
+                                
+                    completionHandler((ApiModel.quotes?.randomElement())!)
+                    
+                    
+                }catch{
+                    print(error) // shows error
+                    print("Decoding failed")// local message
+                }
+                
+            } catch {
+                print(error) // shows error
+                print("Unable to read file")// local message
+            }
+        }
+    }
+
+
+    
+}
+
 class Favorites: ObservableObject {
     // the actual resorts the user has favorited
     var quotes: Set<Quote>
@@ -62,9 +160,10 @@ struct Quote: Codable, Identifiable, Hashable{
         return favorite ?? false
     }
     
-    static let allResorts: [Quote] = Bundle.main.decode("Quotes.json")
+    
     
 }
+
 
 
 extension Quote {

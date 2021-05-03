@@ -15,7 +15,7 @@ struct HomeView: View {
     
     var body: some View {
         TabView {
-            Text("Home View").tabItem {
+            HomeQuoteScreen().tabItem {
                 Image(systemName: "house")
                 Text("Home")
             }

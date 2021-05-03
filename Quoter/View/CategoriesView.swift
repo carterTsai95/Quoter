@@ -90,10 +90,12 @@ struct CategoriesView_Previews: PreviewProvider {
     static var previews: some View {
         Group{
             CategoryGridView()
+                .environmentObject(Favorites())
                 .preferredColorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
                 .previewDisplayName("iPhone 12")
             CategoryGridView()
+                .environmentObject(Favorites())
             
             CategoryItemView(category: Quote.tag.best)
                 .previewLayout(.sizeThatFits)

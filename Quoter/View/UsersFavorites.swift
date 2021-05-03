@@ -13,32 +13,38 @@ struct UsersFavorites: View {
     
     var body: some View {
         NavigationView{
-            
-            VStack(alignment: .center, spacing: 5){
-                if(favorites.quotes.isEmpty) {
-                    
-                    Image("emptyPage")
-                        .resizable()
-                        .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    Text("Haven't had favorite")
-                        .font(.title2)
-                    
-                    
-                    
-                } else {
-                    ScrollView {
-                        ForEach(Array(favorites.quotes)){ quote in
-                            
-                            QuoteCardView(quote: quote)
-                            
+            ZStack{
+                LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    .ignoresSafeArea(edges: .top)
+                VStack(alignment: .center, spacing: 5){
+                    if(favorites.quotes.isEmpty) {
+                        
+                        Image("emptyPage")
+                            .resizable()
+                            .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                        Text("Haven't had favorite")
+                            .font(.title2)
+                        
+                        
+                        
+                    } else {
+                        ScrollView {
+                            ForEach(Array(favorites.quotes)){ quote in
+                                
+                                QuoteCardView(quote: quote)
+                                    
+                            }
                         }
                     }
-                }
-                
-            }//: VStack
-            .padding(.horizontal, 15)
-            .padding(.bottom, 10)
-            .animation(.easeOut(duration: 0.3))
+                    
+                }//: VStack
+                .animation(.easeOut(duration: 0.3))
+                .padding(.horizontal, 15)
+                .padding(.bottom, 10)
+            }
+            
+
+            
             
             
             .navigationBarTitle("My Favorite")
