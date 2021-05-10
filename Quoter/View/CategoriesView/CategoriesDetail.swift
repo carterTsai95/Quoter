@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-
-
+import CoreData
 
 
 struct CategoriesDetail: View {
@@ -15,7 +14,7 @@ struct CategoriesDetail: View {
     let category: Quote.tag
     @State var quotes = [Quote]()
     @ObservedObject var favorites = Favorites()
-    
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         
@@ -43,6 +42,7 @@ struct CategoriesDetail: View {
                         ForEach(quotes.shuffled().prefix(10), id: \.id){ quote in
                             VStack(alignment: .leading, spacing: 5){
                                 QuoteCardView(quote: quote)
+                                    .environment(\.managedObjectContext, self.moc)
                             }
                         }
                         .padding(.horizontal, 15)
@@ -73,10 +73,79 @@ struct CategoriesDetail: View {
     
 }
 
+struct ActionCollectionView: View {
+    
+    @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var favorites: Favorites
+    
+    @State private var presentingSheet = false
+    
+    var quote: Quote
+
+    var body: some View {
+        HStack(alignment: .bottom,spacing: 20) {
+            Spacer()
+            Button(action: {
+                
+                // MARK: - TODO
+                if self.favorites.contains(self.quote) {
+                    let query = quote.text!
+                    let request: NSFetchRequest<FavoriteQuote> = FavoriteQuote.fetchRequest()
+                    request.predicate = NSPredicate(format: "text == %@", query)
+                    
+                    let objects = try! moc.fetch(request)
+                    for obj in objects {
+                        moc.delete(obj)
+                    }
+                    
+                    do {
+                        try moc.save()
+                    } catch {
+                        // Do something... fatalerror
+                    }
+                    
+                    
+                    self.favorites.remove(self.quote)
+                } else {
+                    
+                    let newFavorite = FavoriteQuote(context: self.moc)
+                    newFavorite.text = quote.text
+                    newFavorite.author = quote.author
+                    newFavorite.tag = quote.tag
+                    try? self.moc.save()
+                    
+                    print("add")
+                    self.favorites.add(self.quote)
+                    print(quote)
+                }
+            }) {
+                if self.favorites.contains(self.quote) {
+                    Image(systemName: "heart.fill")
+                } else {
+                    Image(systemName: "heart")
+                }
+            }
+            .foregroundColor(.red)
+            Button(action: {
+                presentingSheet.toggle()
+            }) {
+                Image(systemName: "square.and.arrow.up")
+            }
+            
+            
+        }// HStack
+    }
+}
+
+
 struct QuoteCardView: View {
     
+    @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var favorites: Favorites
-    @State private var presentingSheet = false
+    
+    
+    
+    
     var quote: Quote
     
     
@@ -96,46 +165,21 @@ struct QuoteCardView: View {
                     Text(quote.text ?? "None")
                         .font(.callout)
                 }
-                HStack(alignment: .bottom,spacing: 20) {
-                    Spacer()
-                    Button(action: {
-                        if self.favorites.contains(self.quote) {
-                            self.favorites.remove(self.quote)
-                        } else {
-                            print("add")
-                            self.favorites.add(self.quote)
-                            print(quote)
-                        }
-                    }) {
-                        if self.favorites.contains(self.quote) {
-                            Image(systemName: "heart.fill")
-                        } else {
-                            Image(systemName: "heart")
-                        }
-                    }
-                    .foregroundColor(.red)
-                    Button(action: {
-                        presentingSheet.toggle()
-                    }) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
-                    
-                    
-                }
+                
+                ActionCollectionView(quote: quote)
                 
                 
             }
             .font(.title2)
-        }
+        }//-: GroupBox
         .environmentObject(favorites)
-        .sheet(isPresented: $presentingSheet) {
-            ShareQuoteView(quote: quote)
-        }
+
         
         
         
     }
 }
+
 
 
 struct CategoriesDetail_Previews: PreviewProvider {

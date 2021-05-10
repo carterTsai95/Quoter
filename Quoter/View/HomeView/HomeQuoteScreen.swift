@@ -11,7 +11,7 @@ import SwiftUIPager
 struct HomeQuoteScreen: View {
     @StateObject var page: Page = .first()
     @EnvironmentObject var favorites: Favorites
-    // @ObservedObject var page: Page = .first()
+    
     @State var items = [Quote]()
     
     var body: some View {
@@ -20,34 +20,33 @@ struct HomeQuoteScreen: View {
             Pager(page: page,
                   data: items,
                   id: \.self,
-                  content: { index in
+                  content: { quote in
                     // create a page based on the data passed
                     
                     ZStack {
-                        
                         Rectangle()
                             .fill(Color.white)
                             .opacity(0.001)
                         VStack(spacing: 10){
-                            Text("\(index.text!)")
+                            Text("\(quote.text!)")
                                 .font(.title)
                                 .fontWeight(.ultraLight)
                                 .multilineTextAlignment(.center)
-                            Text("-\(index.author!)-")
+                            Text("-\(quote.author!)-")
                                 .font(.headline)
                                 .fontWeight(.light)
                             HStack(alignment: .bottom,spacing: 20) {
                                 Spacer()
                                 Button(action: {
-                                    if self.favorites.contains(index) {
-                                        self.favorites.remove(index)
+                                    if self.favorites.contains(quote) {
+                                        self.favorites.remove(quote)
                                     } else {
                                         print("add")
-                                        self.favorites.add(index)
+                                        self.favorites.add(quote)
                                         
                                     }
                                 }) {
-                                    if self.favorites.contains(index) {
+                                    if self.favorites.contains(quote) {
                                         Image(systemName: "heart.fill")
                                     } else {
                                         Image(systemName: "heart")
@@ -70,7 +69,6 @@ struct HomeQuoteScreen: View {
                     }
                     .cornerRadius(5)
                     .shadow(radius: 5)
-                    
                     
                   })
                 .vertical()

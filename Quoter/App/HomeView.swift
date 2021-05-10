@@ -27,7 +27,7 @@ struct HomeView: View {
                 Image(systemName: "heart")
                 Text("Favorites")
             }
-            Text("More").tabItem {
+            Text("Setting").tabItem {
                 Image(systemName: "ellipsis")
                 Text("More")
             }
