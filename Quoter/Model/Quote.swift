@@ -9,6 +9,10 @@ import Foundation
 
 let jsonResponse = JsonResoponse()
 
+struct ApiResponse: Codable{
+    var message: String?
+    var quotes: [Quote]?
+}
 
 class JsonResoponse
 {

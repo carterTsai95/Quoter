@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SwiftUIPager
+import CoreData
 
 struct HomeQuoteScreen: View {
     @StateObject var page: Page = .first()
     @EnvironmentObject var favorites: Favorites
-    
+    @Environment(\.managedObjectContext) var moc
+    @State private var presentingSheet = false
     @State var items = [Quote]()
     
     var body: some View {
@@ -35,15 +37,39 @@ struct HomeQuoteScreen: View {
                             Text("-\(quote.author!)-")
                                 .font(.headline)
                                 .fontWeight(.light)
+
+                            
                             HStack(alignment: .bottom,spacing: 20) {
                                 Spacer()
                                 Button(action: {
+                                    // MARK: - TODO
                                     if self.favorites.contains(quote) {
+                                        let query = quote.text!
+                                        let request: NSFetchRequest<FavoriteQuote> = FavoriteQuote.fetchRequest()
+                                        request.predicate = NSPredicate(format: "text == %@", query)
+                                        
+                                        let objects = try! moc.fetch(request)
+                                        for obj in objects {
+                                            moc.delete(obj)
+                                        }
+                                        
+                                        do {
+                                            try moc.save()
+                                        } catch {
+                                            // Do something... fatalerror
+                                        }
                                         self.favorites.remove(quote)
                                     } else {
+                                        
+                                        let newFavorite = FavoriteQuote(context: self.moc)
+                                        newFavorite.text = quote.text
+                                        newFavorite.author = quote.author
+                                        newFavorite.tag = quote.tag
+                                        try? self.moc.save()
+                                        
                                         print("add")
                                         self.favorites.add(quote)
-                                        
+                                        print(quote)
                                     }
                                 }) {
                                     if self.favorites.contains(quote) {
@@ -54,13 +80,18 @@ struct HomeQuoteScreen: View {
                                 }
                                 .foregroundColor(.red)
                                 Button(action: {
-                                    //presentingSheet.toggle()
+                                    presentingSheet.toggle()
                                 }) {
                                     Image(systemName: "square.and.arrow.up")
                                 }
+                                .sheet(isPresented: $presentingSheet) {
+                                    ShareQuoteView(quoteText: quote.text!, quoteAuthor: quote.author!)
+                                }
                                 
                                 
-                            }
+                            }// HStack
+                            
+                            
                         }
                         
                         

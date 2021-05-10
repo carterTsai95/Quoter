@@ -30,16 +30,27 @@ struct CategoriesDetail: View {
                             RoundedRectangle(cornerRadius: 5)
                                 .stroke(lineWidth: 1)
                                 .foregroundColor(Color.gray.opacity(0.25)))
-                        .padding()
+                        .padding(.top)
+                    ZStack{
+                        Text(category.rawValue.capitalized)
+                            .fontWeight(.regular)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
+                            .font(.title2)
+                            .foregroundColor(Color(UIColor.systemGray))
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                readJson()
+                            }, label: {
+                                Image(systemName: "arrow.clockwise")
+                            })
+                            .padding()
+                        }
+                    }
                     
-                    Text(category.rawValue.capitalized)
-                        .fontWeight(.regular)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
-                        .font(.title)
-                        .foregroundColor(Color(UIColor.systemGray))
                     ScrollView() {
-                        ForEach(quotes.shuffled().prefix(10), id: \.id){ quote in
+                        ForEach(quotes.prefix(10), id: \.id){ quote in
                             VStack(alignment: .leading, spacing: 5){
                                 QuoteCardView(quote: quote)
                                     .environment(\.managedObjectContext, self.moc)
@@ -47,6 +58,7 @@ struct CategoriesDetail: View {
                         }
                         .padding(.horizontal, 15)
                         .padding(.bottom, 10)
+                        .animation(.easeInOut)
                     }
                     
                     
@@ -68,6 +80,7 @@ struct CategoriesDetail: View {
     func readJson(){
         jsonResponse.getQuotesByCategory(category: self.category) { quotes in
             self.quotes = quotes
+            self.quotes.shuffle()
         }
     }
     
@@ -86,7 +99,6 @@ struct ActionCollectionView: View {
         HStack(alignment: .bottom,spacing: 20) {
             Spacer()
             Button(action: {
-                
                 // MARK: - TODO
                 if self.favorites.contains(self.quote) {
                     let query = quote.text!
@@ -103,8 +115,6 @@ struct ActionCollectionView: View {
                     } catch {
                         // Do something... fatalerror
                     }
-                    
-                    
                     self.favorites.remove(self.quote)
                 } else {
                     
@@ -131,9 +141,13 @@ struct ActionCollectionView: View {
             }) {
                 Image(systemName: "square.and.arrow.up")
             }
+            .sheet(isPresented: $presentingSheet) {
+                ShareQuoteView(quoteText: quote.text!, quoteAuthor: quote.author!)
+            }
             
             
         }// HStack
+        
     }
 }
 
@@ -142,9 +156,6 @@ struct QuoteCardView: View {
     
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var favorites: Favorites
-    
-    
-    
     
     var quote: Quote
     

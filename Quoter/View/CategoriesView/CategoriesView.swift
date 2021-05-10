@@ -7,10 +7,7 @@
 
 import SwiftUI
 
-struct ApiResponse: Codable{
-    var message: String?
-    var quotes: [Quote]?
-}
+
 
 
 
