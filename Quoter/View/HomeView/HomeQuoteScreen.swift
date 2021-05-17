@@ -15,6 +15,7 @@ struct HomeQuoteScreen: View {
     @Environment(\.managedObjectContext) var moc
     @State private var presentingSheet = false
     @State var items = [Quote]()
+    @State private var selectQuote : Quote? = nil
     
     var body: some View {
         ZStack{
@@ -79,12 +80,16 @@ struct HomeQuoteScreen: View {
                                     }
                                 }
                                 .foregroundColor(.red)
-                                Button(action: {
-                                    presentingSheet.toggle()
-                                }) {
-                                    Image(systemName: "square.and.arrow.up")
-                                }
-                                .sheet(isPresented: $presentingSheet) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                    .onTapGesture {
+                                        var tempQuote = Quote()
+                                        tempQuote.text = quote.text
+                                        tempQuote.author = quote.author
+                                        self.selectQuote = tempQuote
+                                        print(quote.text!)
+                                    }
+                                .sheet(item: self.$selectQuote) { quote in
                                     ShareQuoteView(quoteText: quote.text!, quoteAuthor: quote.author!)
                                 }
                                 

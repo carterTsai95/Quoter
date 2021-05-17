@@ -12,7 +12,6 @@ struct HomeView: View {
     
     @ObservedObject var favorites = Favorites()
     
-    
     var body: some View {
         TabView {
             HomeQuoteScreen().tabItem {
@@ -27,7 +26,7 @@ struct HomeView: View {
                 Image(systemName: "heart")
                 Text("Favorites")
             }
-            Text("Setting").tabItem {
+            SettingsView().tabItem {
                 Image(systemName: "ellipsis")
                 Text("More")
             }
