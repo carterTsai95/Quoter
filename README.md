@@ -1,43 +1,92 @@
-# Quoter
+![Swift](https://img.shields.io/badge/Swift-5.0-brightgreen)
+![Swift](https://img.shields.io/badge/iOS-13.0-brightgreen)
+![Swift](https://img.shields.io/badge/SwiftUI-2.0-brightgreen)
 
-Quoter let user to explore more than 10,000 famous quotes and store it into their own pocket!
+# SwiftUI - Quoter
+<br />
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-There is no additional dependency need to install. (2021/04/17)
-
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+| 1. Home Screen  | 2. Home Screen & Share | 3. Categories|
+| ------------- | ------------- | ------------- | 
+| <img src="Quoter/Screenshot/01.gif" alt="action" width="300"> | <img src="Quoter/Screenshot/02.gif" alt="action" width="300"> | <img src="Quoter/Screenshot/03.gif" alt="action" width="300"> |
 
 
-End with an example of getting some data out of the system or using it for a little demo
+| 4. Favorites Screen  | 5. Setting Screen | 
+| ------------- | ------------- |
+| <img src="Quoter/Screenshot/04.gif" alt="action" width="300"> | <img src="Quoter/Screenshot/05.png" alt="action" width="300"> |
 
-## Running the tests
+Quoter includes a wide range of categories such as marriage, morning, motivational and movies... and more you and explore.
 
-Built the program with the simulator or your own device.
+Different categories of quotes which will motivate your daily life.
 
-## Contributing
+You also can add your favourites quotes into your pocket in order to review them later!
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Feature:
+1. You can download the quotation image to your photo album
+2. Totally 18 categories that you can explore on your wish
+- General
+- Attitude
+- Beauty
+- Best
+- Marriage
+- Medical
+- Men
+- Mom
+- Money
+- Morning
+- Motivational
+- Music
+- Nature
+- Parenting
+- Patience
+- Patriotism
+- Peace
 
-## Versioning
+Privacy Policy: https://quoter-0.flycricket.io/privacy.html
+Terms of use: https://quoter-0.flycricket.io/terms.html
 
-0.1.1
 
-## License
+## Features
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+- [x] Implement Core Data framework to persist user's data
+- [x] Output Image to user's Album by using UIImageWriteToSavedPhotosAlbum 
+- [x] Decoding the local JSON Data and convert to custom object.
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+## Requirements
+
+- iOS 13.0+
+- SwiftUI
+
+## Dependencies
+
+This project use 
+1. [SwiftUIPager](https://github.com/fermoya/SwiftUIPager) to achieve scrollable page.
+
+
+## Installation
+
+Clone the project and run in your local workstation. 
+
+
+## Acknowledgements
+- This project quotation data are from [GoQuotes](https://goquotes.docs.apiary.io/#reference/get-random-quote(s)/apiv1random)
+
+## AppStore Link
+[Quoter](https://apps.apple.com/jm/app/quoter/id1566934513)
+
+## Contact
+Created by [@Hung-Chun, Tsai (Carter)](linkedin.com/in/hung-chun-carter-tsai-372584175) - feel free to contact me!
+
+<div>
+
+<i>Follow me around the web:</i><br>
+
+<!-- <a target="_blank" href="https://www.linkedin.com/in/hung-chun-carter-tsai-372584175/">🇱​🇮​🇳​🇰​🇪​🇩​🇮​🇳​</a> ●
+<a target="_blank" href="https://www.instagram.com/hungchun.tsai/">🇮​🇳​🇸​🇹​🇦​🇬​🇷​🇦​🇲​</a> ●
+<a target="_blank" href="https://www.facebook.com/hongjun.cai.5">🇫​🇦​🇨​🇪​🇧​🇴​🇴​🇰​</a> ● -->
+
+<a href="https://www.linkedin.com/in/hung-chun-carter-tsai-372584175/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+<a href="https://www.instagram.com/hungchun.tsai/" target="_blank"><img src="https://img.shields.io/badge/Instagram-%23E4405F.svg?&style=flat-square&logo=instagram&logoColor=white" alt="Instagram"></a>
+<a href="https://www.facebook.com/hongjun.cai.5" target="_blank"><img src="https://img.shields.io/badge/Facebook-%231877F2.svg?&style=flat-square&logo=facebook&logoColor=white" alt="Facebook"></a>
+
+</div>
